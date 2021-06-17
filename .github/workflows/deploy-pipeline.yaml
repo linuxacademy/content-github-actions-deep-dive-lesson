@@ -1,5 +1,8 @@
 name: Deploy Lambda Function
-on: [push]
+on:
+  push:
+    paths:
+      - 'userguide.md'
 
 jobs:
 
@@ -44,3 +47,21 @@ jobs:
         with:
           name: zipped-bundle
           path: ${{ github.sha }}.zip
+
+  update-docs:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create directory
+        run: mkdir docs
+      - name: Convert MD to HTML
+        uses: docker://pandoc/core:2.9
+        with: 
+          args: userguide.md -t html -o docs/index.html
+      - name: Update GitHub page
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: gh-pages
+          folder: docs
