@@ -1,0 +1,14 @@
+name: some shell commands
+on: pull_request
+jobs:
+  ASF-first:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo something
+        run: echo "gello world"
+      - name: Software version
+        run: |
+          npm -v
+          node -v
+          docker -v
+          
