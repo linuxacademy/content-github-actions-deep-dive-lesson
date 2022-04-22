@@ -13,7 +13,7 @@ jobs:
         with:
           python-version: 3.8
       - name: Install libraries
-        run: pip install flake8
+        run: pip3 install flake8
       - name: Lint with flake8
         run: |
             cd function
