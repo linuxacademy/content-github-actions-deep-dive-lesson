@@ -27,3 +27,6 @@ Una gran ciudad con rascacielos y mierdas varias en las que perder mucho tiempo 
 
 Este es una ejemplo de la comididaca deliciosa muajaja
 ![alt text](img/comida.jpg "Ramen y gyozas")
+
+
+## Open border to tourist Japan
