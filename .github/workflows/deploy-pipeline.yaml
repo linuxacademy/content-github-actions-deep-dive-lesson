@@ -1,5 +1,5 @@
 name: Deploy Lambda Function
-#on:
+on: [workflow_dispatch]
 #  push:
 #    paths:
 #      - userguide.md
