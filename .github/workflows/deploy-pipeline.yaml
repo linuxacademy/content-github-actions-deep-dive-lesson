@@ -1,4 +1,4 @@
-name: Workflow manual
+name: hola mundo japonero
 on: [workflow_dispatch]
 #  push:
 #    paths:
