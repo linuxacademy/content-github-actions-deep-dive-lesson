@@ -1,4 +1,4 @@
-name: Deploy Lambda Function
+name: Workflow manual
 on: [workflow_dispatch]
 #  push:
 #    paths:
