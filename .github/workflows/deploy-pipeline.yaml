@@ -1,5 +1,8 @@
 name: Deploy Lambda Function
-on: [push]
+on:
+  push:
+    paths:
+      - userguide.md
 
 jobs:
 
