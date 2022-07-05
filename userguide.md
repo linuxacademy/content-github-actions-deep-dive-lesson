@@ -32,4 +32,4 @@ Este es una ejemplo de la comididaca deliciosa muajaja
 <img src="img/comida.jpg" title="Ramen y gyozas" alt="alt text" width="1080">
 
 
-# Open border to tourist Japan, I want to see 2022 momiji or koyo
+# Japan, open border to tourist!!!, I want to see 2022 momiji or koyo
