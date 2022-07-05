@@ -23,10 +23,13 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 # Japon
 ## Tokyo
 Una gran ciudad con rascacielos y mierdas varias en las que perder mucho tiempo y dinero disfrutando como un enano y poniendote to gordaco comiendo mil cosas
-![alt text](img/pagoda.JPG "Pagoda monisima")
+
+<img src="img/pagoda.JPG" alt="Pagoda de Narita, pexioxa" width="1080">
+
 
 Este es una ejemplo de la comididaca deliciosa muajaja
-![alt text](img/comida.jpg "Ramen y gyozas")
+
+<img src="img/comida.jpg" alt="Estaba delicioso" width="1080">
 
 
 # Open border to tourist Japan, I want to see 2022 momiji or koyo
