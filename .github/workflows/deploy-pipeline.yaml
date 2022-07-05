@@ -89,6 +89,8 @@ jobs:
         uses: docker://pandoc/core:2.9
         with:
           args: userguide.md -t html -o docs/index.html
+      - name: copy iamges
+        run: cp -r img/ docs/
       - name: Deploy Pages site
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
