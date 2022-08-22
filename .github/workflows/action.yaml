@@ -1,6 +1,6 @@
 name: Deploy my Lambda Function
 
-# trigger on all push events to main branch
+# trigger on all push events to main branch. cambio 1
 on: 
   push:
     branches:
