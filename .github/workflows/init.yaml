@@ -10,3 +10,5 @@ jobs:
     steps:
       - name: Run a one-line script
         run: echo Hello, world!
+      - name: Get runner os info
+        run: cat /etc/os-release >info.md
