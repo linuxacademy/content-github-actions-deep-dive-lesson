@@ -47,7 +47,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Upload to S3
-        run: aws s3 cp ${{ github.sha }}.zip s3://<YOUR BUCKET NAME HERE>/${{ github.repository }}/${{ github.sha }}.zip
+        run: aws s3 cp ${{ github.sha }}.zip s3://content-github-actions-deep-dive-lesson/${{ github.repository }}/${{ github.sha }}.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -59,11 +59,11 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - name: Update function code
+      - name: Update function code to lambda
         run: |
             aws lambda update-function-code \
-              --function-name <YOUR FUNCTION NAME HERE> \
-              --s3-bucket <YOUR BUCKET NAME HERE> \
+              --function-name content-github-actions-deep-dive-lesson \
+              --s3-bucket content-github-actions-deep-dive-lesson \
               --s3-key ${{ github.repository }}/${{ github.sha }}.zip \
               --publish
 
