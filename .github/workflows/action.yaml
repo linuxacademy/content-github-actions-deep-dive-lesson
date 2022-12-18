@@ -9,7 +9,7 @@ on:
 jobs:
 
   build:
-    runs-on: centos
+    runs-on: ubuntu-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -33,7 +33,7 @@ jobs:
           path: ${{ github.sha }}.zip
   
   upload:
-    runs-on: centos
+    runs-on: ubuntu-latest
     needs: build
     steps:
       - name: Download artifact
