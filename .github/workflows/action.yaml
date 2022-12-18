@@ -9,7 +9,7 @@ on:
 jobs:
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04-LTS
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -33,7 +33,7 @@ jobs:
           path: ${{ github.sha }}.zip
   
   upload:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04-LTS
     needs: build
     steps:
       - name: Download artifact
