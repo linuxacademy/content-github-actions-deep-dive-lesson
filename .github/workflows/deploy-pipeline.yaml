@@ -4,7 +4,7 @@ on: [push]
 jobs:
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps: 
       - name: Check out code
         uses: actions/checkout@v2
@@ -21,7 +21,7 @@ jobs:
             flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: lint
     steps:
       - name: Check out code
@@ -46,7 +46,7 @@ jobs:
           path: ${{ github.sha }}.zip
 
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: build
     steps:
       - name: Create release
