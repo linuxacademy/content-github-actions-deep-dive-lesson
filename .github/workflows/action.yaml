@@ -16,7 +16,7 @@ jobs:
       - name: install libraries 
         run: |
          cd function
-         python -m pip install --pgrade pip
+         python -m pip install --upgrade pip
          if [-f requirements.txt]; then pip install -r requirements.txt -t .; fi
       - name: create a zip bundle
         run: |
