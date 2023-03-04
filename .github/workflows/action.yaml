@@ -23,7 +23,7 @@ jobs:
       - name: Create zip bundle
         run: |
             cd function
-            zip -f ../${{ github.sha }}.zip .
+            zip -r ../${{ github.sha }}.zip .
       - name: Archive artifact
         uses: actions/upload-artifact@v2
         with:
