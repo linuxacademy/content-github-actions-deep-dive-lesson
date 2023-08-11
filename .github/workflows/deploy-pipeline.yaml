@@ -44,3 +44,18 @@ jobs:
         with:
           name: zipped-bundle
           path: ${{ github.sha }}.zip
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: create release
+        uses: actions/create-release@v1
+        env:
+          GITHUB: ${{ secrets.github_token }}
+        with:
+          tag_name: ${{ github.run_number }}
+          release_name: Release from ${{ github.run_number }}
+          body: New release for ${{ github.sha }}. Release notes on the documentation site
+          draft: false
+          prerelease: false
+          
+      
