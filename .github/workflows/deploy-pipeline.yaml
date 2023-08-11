@@ -57,6 +57,7 @@ jobs:
           tag_name: ${{ github.run_number }}
           release_name: Release from ${{ github.run_number }}
           body: New release for ${{ github.sha }}. Release notes can be found in the docs.
-          github_owner: Repo owner is ${{ github.repository_owner }}/${{ github.head_ref }}
+          github_owner: Repo owner is ${{ github.repository_owner }}
           draft: false
           prerelease: false
+          permissions: write-all
