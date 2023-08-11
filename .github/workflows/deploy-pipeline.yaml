@@ -44,3 +44,25 @@ jobs:
         with:
           name: zipped-bundle
           path: ${{ github.sha }}.zip
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: release duzelt
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.run_number }}
+          release_name: Release from ${{ github.run_number }}
+          # body: New 
+          github_owner: Repo owner is ${{ github.repository_owner }}
+          draft: false
+          prerelease: false
+
+
+          
+      
+        
+
