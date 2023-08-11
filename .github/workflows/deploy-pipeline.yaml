@@ -51,7 +51,9 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB: ${{ secrets.github_token }}
-          release_name: Release from ${{ secrets.run_number }}
+        with:
+          tag_name: ${{ github.run_number }}
+          release_name: Release from ${{ github.run_number }}
           body: New release for ${{ github.sha }}. Release notes on the documentation site
           draft: false
           prerelease: false
