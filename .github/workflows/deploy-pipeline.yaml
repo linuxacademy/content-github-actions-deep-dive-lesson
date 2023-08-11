@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: release duzelt
+      - name: Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.github_token }} # This token is provided by Actions, you do not need to create your own token
@@ -57,12 +57,6 @@ jobs:
           tag_name: ${{ github.run_number }}
           release_name: Release from ${{ github.run_number }}
           body: New release for ${{ github.sha }}. Release notes can be found in the docs.
-          github_owner: Repo owner is ${{ github.repository_owner }}
+          github_owner: Repo owner is ${{ github.repository_owner }}/${{ github.head_ref }}
           draft: false
           prerelease: false
-
-
-          
-      
-        
-
