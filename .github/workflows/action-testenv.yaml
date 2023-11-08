@@ -4,7 +4,7 @@ name: Deploy my Lambda Function
 on: 
   push:
     branches:
-      - main
+      - feature01
 
 jobs:
 
@@ -83,7 +83,7 @@ jobs:
       - name: Update function code
         run: |
             aws lambda update-function-code \
-              --function-name lab2 \
+              --function-name lab2feature1 \
               --s3-bucket ${{ github.S3_BUCKET_NAME }} \
               --s3-key ${{ github.repository }}/${{ github.sha }}.zip \
               --publish
