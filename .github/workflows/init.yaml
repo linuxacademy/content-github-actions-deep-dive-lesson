@@ -2,11 +2,24 @@
 
 name: Placeholder
 
-on: push
+on: pull_request
 
 jobs:
   init:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: .
     steps:
-      - name: Run a one-line script
-        run: echo Hello, world!
+    - uses: actions/checkout@v4
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x'
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build
+    - name: Run
+      run: dotnet run
