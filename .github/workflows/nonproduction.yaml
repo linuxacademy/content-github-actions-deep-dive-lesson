@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      BUCKET_NAME: phh-acloudguru
+      BUCKET_NAME: phh-acloudguru-read
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -27,5 +27,5 @@ jobs:
           npm ci 
           npm run build
       - name: deploy to bucket
-        run: aws s3 cp public s3://${{ env.BUCKET_NAME }}/ --recursive
+        run: aws s3 cp public s3://${{ env.BUCKET_NAME }}/ --recursive --acl public-read
 
