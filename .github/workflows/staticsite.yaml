@@ -1,6 +1,8 @@
 name: Deploy Lambda Function
-on: [push]
-  - branch:
+on:
+  push:
+    branches:
+    - StaticSite
 jobs:
   lint:
     runs-on: ubuntu-latest
