@@ -104,7 +104,7 @@ jobs:
       - name: Wait 30 seconds
         run: sleep 30
       - name: Derstroy test function
-        if: ${{ always }} 
+        if: ${{ always() }} 
         run:  aws lambda delete-function --function-name test-function
 
 #
