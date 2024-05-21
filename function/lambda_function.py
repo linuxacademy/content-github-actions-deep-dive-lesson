@@ -1,5 +1,6 @@
 from github import Github
 
+
 def lambda_handler(event, context):
     """Lambda function wrapper
     Args:

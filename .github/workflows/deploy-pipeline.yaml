@@ -86,6 +86,27 @@ jobs:
           aws-region: eu-west-2
       - name: Uplload to S3
         run: aws s3 cp ${{ github.sha }}.zip s3://phh-acloudguru/${{ github.sha }}.zip
+
+  test:
+    runs-on: ubuntu-latest
+    needs: upload_url
+    steps:
+      - name: AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
+      - name: Create test function
+        run:
+          aws lambda create-function --function-name test-function --code S3Bucket=phh-acloudguru,S3Key=${{ github.sha }}.zip --handler lambda_function.lambda_handler --runtime python3.8 \
+                                     --role arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/my-lambda-role
+      - name: Wait 30 seconds
+        run: sleep 30
+      - name: Derstroy test function
+        if: ${{ always }} 
+        run:  aws lambda delete-function --function-name test-function
+
 #
 # before progressing ensure we 
 # Create a ROLE (my-lambda-role) using the service LAMBDA but doesn't need any permissions
@@ -93,7 +114,7 @@ jobs:
 #
   deploy:
     runs-on: ubuntu-latest
-    needs: upload_url
+    needs: test
     steps:
       - name: AWS
         uses: aws-actions/configure-aws-credentials@v1
