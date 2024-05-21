@@ -103,7 +103,7 @@ jobs:
           aws-region: eu-west-2
       - name: Update Function Code
         run:
-          aws lambda update-function-coce --function-name my-function --s3-bucket phh-acloudguru --s3-key ${{ github.sha }}.zip --publish
+          aws lambda update-function-code --function-name my-function --s3-bucket phh-acloudguru --s3-key ${{ github.sha }}.zip --publish
 
 
 
