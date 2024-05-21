@@ -27,5 +27,5 @@ jobs:
           npm ci 
           npm run build
       - name: deploy to bucket
-        run: aws s3 cp ${{ github.sha }}.zip s3://${{ env.BUCKET_NAME }}/ --recursive --acl public-read
+        run: aws s3 cp public s3://${{ env.BUCKET_NAME }}/ --recursive --acl public-read
 
