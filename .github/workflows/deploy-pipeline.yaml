@@ -102,7 +102,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-2
       - name: Update Function Code
-        uses: actions/download-artifact@v2
         run:
           aws lambda update-function-coce --function-name my-function --s3-bucket phh-acloudguru --s3-key ${{ github.sha }}.zip --publish
 
