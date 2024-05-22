@@ -68,7 +68,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Upload to S3
-        run: aws s3 cp ${{ github.sha }}.zip s3://<YOUR BUCKET NAME HERE>/${{ github.repository }}/${{ github.sha }}.zip
+        run: aws s3 cp ${{ github.sha }}.zip s3://phh-acloudguru/${{ github.sha }}.zip
 
   nonprod:
     runs-on: ubuntu-latest
@@ -85,10 +85,7 @@ jobs:
           aws-region: us-east-1
       - name: Create test function
         run: |
-            aws lambda create-function --function-name test-function-${{ matrix.input }} \
-              --code S3Bucket=<YOUR BUCKET NAME HERE>,S3Key=${{ github.repository }}/${{ github.sha }}.zip \
-              --handler lambda_function.lambda_handler --runtime python3.8 \
-              --role arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/<YOUR ROLE NAME HERE>
+            aws lambda create-function --function-name test-function-${{ matrix.input }} --code S3Bucket=phh-acloudguru,S3Key=${{ github.sha }}.zip --handler lambda_function.lambda_handler --runtime python3.8 --role arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/my-lambda-role
       - name: Invoke test function 
         run: |
             aws lambda invoke --function-name test-function-${{ matrix.input }} \
@@ -114,11 +111,7 @@ jobs:
           aws-region: us-east-1
       - name: Update function code
         run: |
-            aws lambda update-function-code \
-              --function-name <YOUR FUNCTION NAME HERE> \
-              --s3-bucket <YOUR BUCKET NAME HERE> \
-              --s3-key ${{ github.repository }}/${{ github.sha }}.zip \
-              --publish
+            aws lambda update-function-code --function-name my-github-function --s3-bucket phh-acloudguru --s3-key ${{ github.sha }}.zip --publish
 
   docs:
     runs-on: ubuntu-latest
