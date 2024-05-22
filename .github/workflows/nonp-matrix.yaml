@@ -2,7 +2,7 @@ name: Deploy Lambda Function
 on: 
   push:
     branches:
-    - lab
+    - matrix-lab
 
 jobs:
   lint:
