@@ -1,0 +1,140 @@
+name: Deploy Lambda Function
+on: 
+  push:
+    branches:
+    - lab
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install libraries
+        run: pip install flake8
+      - name: Lint with flake8
+        run: |
+            cd function
+            flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+            flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+  build:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install libraries
+        run: |
+            cd function
+            python -m pip install --upgrade pip
+            if [ -f requirements.txt ]; then pip install -r requirements.txt -t .; fi 
+      - name: Zip bundle
+        run: |
+            cd function
+            zip -r ../${{ github.sha }}.zip .
+      - name: Archive artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: zipped-bundle
+          path: ${{ github.sha }}.zip
+  publish:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
+          body: New release for ${{ github.sha }}. Release notes can be found in the docs.
+          draft: false
+          prerelease: false
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: zipped-bundle
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} 
+          asset_path: ./${{ github.sha }}.zip
+          asset_name: source_code_with_libraries.zip
+          asset_content_type: application/zip
+
+  upload_url:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: zipped-bundle
+      - name: AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
+      - name: Uplload to S3
+        run: aws s3 cp ${{ github.sha }}.zip s3://phh-acloudguru/${{ github.sha }}.zip
+
+  test:
+    runs-on: ubuntu-latest
+    needs: upload_url
+    strategy: 
+      matrix:
+        input:  ["Hello", "Hi"]
+
+    steps:
+      - name: AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
+      - name: Create test function
+        run:
+          aws lambda create-function --function-name test-function-${{ matrix.input }} --code S3Bucket=phh-acloudguru,S3Key=${{ github.sha }}.zip --handler lambda_function.lambda_handler --runtime python3.8 --role arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/my-lambda-role
+      - name: Wait 30 seconds
+        run: sleep 30
+      - name: Invoke test function
+        run: |
+              aws lambda invoke --function-name test-function-${{ matrix.input }} --payload $(echo "{\"input\": \"${{ matrix.input }}\"}" | base64) --output json out
+              if grep -q "Error" out; then
+                 exit1
+              fi
+      - name: Destroy test function
+        if: ${{ always() }} 
+        run:  aws lambda delete-function --function-name test-function-${{ matrix.input }}
+
+#
+# before progressing ensure we 
+# Create a ROLE (my-lambda-role) using the service LAMBDA but doesn't need any permissions
+# Create a lambda function (my-function), python 3.8, use the new role.
+#
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
+      - name: Update Function Code
+        run:
+          aws lambda update-function-code --function-name my-github-function --s3-bucket phh-acloudguru --s3-key ${{ github.sha }}.zip --publish
