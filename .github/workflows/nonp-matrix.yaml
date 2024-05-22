@@ -73,6 +73,7 @@ jobs:
           asset_path: ./${{ github.sha }}.zip
           asset_name: source_code_with_libraries.zip
           asset_content_type: application/zip
+
   upload_url:
     runs-on: ubuntu-latest
     needs: build
@@ -93,9 +94,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: upload_url
-    strategy: input
-    matrix:
-      input:  ["Hello", "Hi"]
+    strategy: 
+      matrix:
+        input:  ["Hello", "Hi"]
+
     steps:
       - name: AWS
         uses: aws-actions/configure-aws-credentials@v1
@@ -136,7 +138,3 @@ jobs:
       - name: Update Function Code
         run:
           aws lambda update-function-code --function-name my-github-function --s3-bucket phh-acloudguru --s3-key ${{ github.sha }}.zip --publish
-
-
-
-
