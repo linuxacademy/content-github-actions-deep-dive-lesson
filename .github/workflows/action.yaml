@@ -115,7 +115,7 @@ jobs:
       - name: Update function code
         run: |
             aws lambda update-function-code \
-              --function-name test-function \
+              --function-name test-function-${{ matrix.input }} \
               --s3-bucket phh-acloudguru \
               --s3-key ${{ github.repository }}/${{ github.sha }}.zip \
               --publish
