@@ -55,13 +55,13 @@ jobs:
       - name: Checkout code code
         uses: actions/checkout@v2
       - name: Create pages directory
-        run: mkdir docs
+        run: mkdir docs2
       - name: Convert markdown to HTML 
         uses: docker://pandoc/core:2.9
         with:
-          args: userguide.md -t html -o docs/index.html
+          args: userguide.md -t html -o docs2/index.html
       - name: Deploy Pages site
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
           branch: gh-pages
-          folder: docs
+          folder: docs2
