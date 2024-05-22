@@ -93,9 +93,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: upload_url
-    strategy: input
-    matrix:
-      input:  ["Hello", "Hi"]
+    strategy: 
+      matrix:
+        input:  ["Hello", "Hi"]
     steps:
       - name: AWS
         uses: aws-actions/configure-aws-credentials@v1
