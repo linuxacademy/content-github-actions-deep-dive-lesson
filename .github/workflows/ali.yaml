@@ -85,8 +85,8 @@ jobs:
           aws-region: us-east-1
       - name: Create test function
         run: |
-            aws lambda create-function --function-name test-function-${{ matrix.input }} \
-              --code S3Bucket=<YOUR BUCKET NAME HERE>,S3Key=${{ github.repository }}/${{ github.sha }}.zip \
+            aws lambda create-function --function-name ali-${{ matrix.input }} \
+              --code S3Bucket=aliahmad-git-test,S3Key=${{ github.repository }}/${{ github.sha }}.zip \
               --handler lambda_function.lambda_handler --runtime python3.8 \
               --role arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/<YOUR ROLE NAME HERE>
       - name: Invoke test function 
@@ -116,7 +116,7 @@ jobs:
         run: |
             aws lambda update-function-code \
               --function-name <YOUR FUNCTION NAME HERE> \
-              --s3-bucket <YOUR BUCKET NAME HERE> \
+              --s3-bucket aliahmad-git-test \
               --s3-key ${{ github.repository }}/${{ github.sha }}.zip \
               --publish
 
