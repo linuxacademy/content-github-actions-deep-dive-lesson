@@ -1,4 +1,4 @@
-name: Deploy Lambda Function
+name: Deploy Lambda FunctioN
 on: 
   push:
     paths:
@@ -60,7 +60,7 @@ jobs:
         uses: docker://pandoc/core:2.9
         with:
           args: userguide.md -t html -o docs/index.html
-      - name: Deploy Pages site
+      - name: Deploy Pages Site
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
           branch: gh-pages
