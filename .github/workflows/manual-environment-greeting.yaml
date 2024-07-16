@@ -1,0 +1,38 @@
+name: update-infra-stack-manually
+
+on:
+  workflow_dispatch:
+    inputs:
+      stack:
+        description: 'Select the specific stack to update (e.g., foo-prod)'
+        type: choice
+        required: true
+        options:
+          - foo-prod
+          
+env:
+  AWS_DEFAULT_REGION: us-east-1
+
+jobs:
+  extract-and-set-vars:
+    runs-on: ubuntu-latest
+    outputs:
+      stack-prefix: ${{ steps.set-vars.outputs.stack-prefix }}
+      stack-suffix: ${{ steps.set-vars.outputs.stack-suffix }}
+    steps:
+      - name: Extract stack parts and set output
+        id: set-vars
+        run: |
+          STACK=${{ inputs.stack }}
+          IFS='-' read -r STACK_PREFIX STACK_SUFFIX <<< "$STACK"
+          echo "::set-output name=stack-prefix::$STACK_PREFIX"
+          echo "::set-output name=stack-suffix::$STACK_SUFFIX"
+
+  update-stack:
+    needs: extract-and-set-vars
+    uses: ./.github/workflows/_run_pulumi.yaml
+    with:
+      work-dir: ./.infrastructure/${{ needs.extract-and-set-vars.outputs.stack-prefix }}
+      stack: ${{ inputs.stack }}
+      runner-stage: ${{ needs.extract-and-set-vars.outputs.stack-suffix }}
+      apply: true

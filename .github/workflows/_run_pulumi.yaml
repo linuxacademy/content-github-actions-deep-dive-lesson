@@ -1,0 +1,33 @@
+# .github/workflows/_run_pulumi.yaml
+name: Run Pulumi
+
+on:
+  workflow_call:
+    inputs:
+      work-dir:
+        description: 'The working directory for Pulumi'
+        required: true
+        type: string
+      stack:
+        description: 'The stack to update'
+        required: true
+        type: string
+      runner-stage:
+        description: 'The runner stage'
+        required: true
+        type: string
+      apply:
+        description: 'Flag to apply changes'
+        required: true
+        type: boolean
+
+jobs:
+  print-vars:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print variables
+        run: |
+          echo "Work Directory: ${{ inputs.work-dir }}"
+          echo "Stack: ${{ inputs.stack }}"
+          echo "Runner Stage: ${{ inputs.runner-stage }}"
+          echo "Apply Flag: ${{ inputs.apply }}"
