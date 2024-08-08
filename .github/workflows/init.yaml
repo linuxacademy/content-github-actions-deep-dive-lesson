@@ -1,8 +1,9 @@
 # This is a placeholder so actions won't default to a getting started page
 
-name: Placeholder
+name: sample_workflow
 
-on: push
+on:
+  workflow_dispatch:
 
 jobs:
   init:
